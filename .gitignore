@@ -35,6 +35,10 @@ MANIFEST
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+car-env/
+__pycache__/
+.ipynb_checkpoints/
+*.pkl
 
 # Unit test / coverage reports
 htmlcov/
