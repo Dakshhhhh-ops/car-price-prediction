@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
+import os
 
 # Set page layout
 st.set_page_config(page_title="Used Car Price Predictor", layout="centered")
@@ -11,9 +12,15 @@ st.write("Enter the vehicle details below to estimate its market value (in Lakhs
 # 1. Load the model and columns safely
 @st.cache_resource
 def load_assets():
-    with open('car_price_model.pkl', 'rb') as f:
+    # Get the exact directory where app.py lives
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    
+    model_path = os.path.join(BASE_DIR, 'car_price_model.pkl')
+    columns_path = os.path.join(BASE_DIR, 'model_columns.pkl')
+    
+    with open(model_path, 'rb') as f:
         model = pickle.load(f)
-    with open('model_columns.pkl', 'rb') as f:
+    with open(columns_path, 'rb') as f:
         columns = pickle.load(f)
     return model, columns
 
