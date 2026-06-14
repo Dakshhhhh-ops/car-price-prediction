@@ -2,21 +2,21 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
-import os
+from pathlib import Path
 
 # Set page layout
 st.set_page_config(page_title="Used Car Price Predictor", layout="centered")
 st.title("🚗 Used Car Price Predictor")
 st.write("Enter the vehicle details below to estimate its market value (in Lakhs).")
 
-# 1. Load the model and columns safely
+# 1. Load the model and columns using Pathlib (Cross-platform friendly)
 @st.cache_resource
 def load_assets():
-    # Get the exact directory where app.py lives
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    # Automatically finds the current directory of app.py
+    current_dir = Path(__file__).parent
     
-    model_path = os.path.join(BASE_DIR, 'car_price_model.pkl')
-    columns_path = os.path.join(BASE_DIR, 'model_columns.pkl')
+    model_path = current_dir / 'car_price_model.pkl'
+    columns_path = current_dir / 'model_columns.pkl'
     
     with open(model_path, 'rb') as f:
         model = pickle.load(f)
@@ -26,8 +26,8 @@ def load_assets():
 
 try:
     model, model_columns = load_assets()
-except FileNotFoundError:
-    st.error("Model files not found! Please run the export code in your notebook first.")
+except Exception as e:
+    st.error(f"Error loading assets: {e}")
     st.stop()
 
 # 2. Re-create the categorical options directly from your pipeline rules
